@@ -7,7 +7,7 @@
 - Scope: (main flows covered)
 
 ## Tech Stack
-- (Playwright / Selenium / Postman / k6 / ...)
+- Selenium, Java, TestNG, Maven, Allure
 
 ## Project Structure
 - `docs/test-plan/`: test plan
