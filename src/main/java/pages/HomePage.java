@@ -3,9 +3,10 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import core.Config;
+
 public class HomePage extends BasePage {
 
-    private static final String HOME_URL = "https://automationexercise.com/";
     private static final By PRODUCTS_LINK = By.cssSelector("a[href='/products']");
 
     public HomePage(WebDriver driver) {
@@ -13,7 +14,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage open() {
-        driver.get(HOME_URL);
+        driver.get(Config.baseUrl());
         return this;
     }
 
