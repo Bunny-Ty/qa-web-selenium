@@ -73,14 +73,14 @@ A guided exploratory session covered the whole site, with the main flows (produc
 
 ### 5.3 Automation
 
-- Stack: Selenium WebDriver, Java 23 (to be confirmed during framework setup), Maven, TestNG, Allure, Page Object Model with a shared `BaseTest`.
+- Stack: Selenium WebDriver, Java 23, Maven, TestNG, Allure, Page Object Model with a shared `BaseTest`.
 - Data-driven tests use TestNG `@DataProvider`.
 - Tests read data at run time (product names, prices, quantities) and check relationships (for example line total equals price times quantity) rather than hard-coded values. Fixed data that cannot be avoided is kept in a separate file with the date it was observed.
 - Browser-native validation bubbles are not compared by text, because their language depends on the browser.
 - Waits are conditional, never fixed sleeps. Timed messages (about 5 seconds) are checked as soon as they appear.
 - The browser alert on the contact form (`Press OK to proceed!`) is handled with alert handling.
 - Search is triggered with the search button, not with the Enter key (see FND-07).
-- How to handle the advertising popup is decided in PROJECT-25 after trying it with real Selenium runs (see Section 8).
+- The Google full-screen advertising popup can block a click and leaves `#google_vignette` in the URL. After every click that navigates, the framework waits for the target URL or for the popup, closes the popup with its `Close` button (found in the visible, wide iframe) and then waits for the target URL. The popup does not always appear: in the runs so far (2026-11-26 and 2026-11-27) it appeared on the first navigation of a new browser session and not on the later ones, which is an observation and not a rule.
 
 ### 5.4 Defect handling
 
@@ -122,8 +122,8 @@ When a defect candidate (`FND-nn`) is confirmed, it gets a bug report with a `BU
 ## 7. Test Data
 
 - Only fake data is used: emails such as `name@example.com`, fake names and addresses, fake card numbers. No real personal data is entered.
-- Account strategy is not decided yet: create one account manually and reuse it, or create an account inside the tests on every run. The decision will be made in PROJECT-25 using the findings for FT-06 and FT-07 (signup has little validation, and Delete Account is available for cleanup).
-- Login credentials are never committed. In CI they are stored in GitHub Secrets.
+- Account strategy: tests that need an account create a new one at run time (unique `@example.com` email, generated password) and delete it with Delete Account in `@AfterMethod(alwaysRun = true)`. A new account has an empty cart, so each test is independent. Risk: if registration is broken, the tests that need a login fail too, so the registration tests are read first when a report shows many failures.
+- No credentials are committed. Passwords are generated at run time, so no secrets are needed in CI.
 - Product data (names, prices, counts) can change at any time on the public site, so values from exploration are examples only.
 
 ## 8. Risks and Mitigation
