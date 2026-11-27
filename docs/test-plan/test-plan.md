@@ -189,13 +189,13 @@ Source: exploratory session, 2026-11-22 to 2026-11-25, on https://automationexer
 | OBS-10 | FT-09 | Only the Email field is required in the contact form; a file up to 20 MB was accepted (larger files were not tried). |
 | OBS-11 | FT-10 | Subscribing with the same email again succeeds with no duplicate warning; the success message disappears after about 5 seconds and the field is cleared. |
 | OBS-12 | FT-11 | An unknown URL redirects to the home page; there is no 404 page. |
+| OBS-13 | FT-05 | The cart page `/view_cart` has the browser tab title `Automation Exercise - Checkout` (seen 2026-11-27). |
 
 ### 10.3 Items to verify again
 
 - Whether FND-06 and the search findings share one cause (URL encoding).
-- Whether the double space in page titles (OBS-02) comes from an injected ad element; check `getText` against `textContent`.
+- Whether the double space in the page headings (OBS-02) comes from an injected ad element. On 2026-11-27 the browser tab title (`getTitle`, `document.title` and `textContent`) was read on 8 pages (`/`, `/products`, `/login`, `/view_cart`, `/contact_us`, `/test_cases`, `/api_list`, `/product_details/1`) and was the same in all three, with a single space after `-`. The headings of the category and brand pages were not read yet.
 - The source of the `Rs. 1000` text (OBS-03).
-- Whether the close button of the advertising popup is inside an iframe.
 - File size limit above 20 MB in the contact form.
 - Behavior with a leading space in search (OBS-01), which was not consistent between two sessions.
 
