@@ -5,14 +5,14 @@
 | Application under test | Automation Exercise (https://automationexercise.com) |
 | Feature | FT-07 - Login and logout |
 | Related work items | PROJECT-23 (test plan and exploration), PROJECT-24 (test cases) |
-| Last updated | 2026-11-26 |
+| Last updated | 2026-11-28 |
 
 ## Notes
 
 - No requirements document is available. Expected results come from direct observation during exploration (see PROJECT-23). Cases of type **Observation** describe behavior that was observed but cannot be confirmed as correct.
 - **Auto** shows whether the case is a candidate for Selenium automation.
 - Messages for empty required fields are browser validation bubbles, not messages of the website. Their text depends on the browser language, so the tests check that a bubble appears on the right field and that the form is not submitted, not the text.
-- Credentials are never stored in this repository. `<TEST_EMAIL>` and `<TEST_PASSWORD>` come from the local configuration (GitHub Secrets in CI). The account must already exist before these cases run.
+- Credentials are never stored in this repository. Before each case that needs an account, the test creates a new one at run time (a unique `...@example.com` email and a password generated at run time, fake data only) and deletes it afterwards. `<TEST_EMAIL>` and `<TEST_PASSWORD>` in the cases stand for these run-time values.
 - Each case starts from a logged-out state with an empty cart.
 - The advertising popup can appear on any page change. Closing it is the job of the test framework and is not written as a step in each case.
 

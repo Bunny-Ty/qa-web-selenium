@@ -5,7 +5,7 @@
 | Application under test | Automation Exercise (https://automationexercise.com) |
 | Feature | FT-06 - Account registration and deletion |
 | Related work items | PROJECT-23 (test plan and exploration), PROJECT-24 (test cases) |
-| Last updated | 2026-11-26 |
+| Last updated | 2026-11-28 |
 
 ## Notes
 
@@ -13,7 +13,7 @@
 - Cases with **Auto** = `No (Defect candidate)` show a reasonable expected result and the behavior that was observed. They are possible bugs that are not confirmed yet (see the test plan, Section 5.4). They are not automated until the behavior is confirmed.
 - **Auto** shows whether the case is a candidate for Selenium automation.
 - Messages for empty required fields and for badly formatted emails are browser validation bubbles, not messages of the website. Their text depends on the browser language, so the tests check that a bubble appears on the right field and that the form is not submitted, not the text.
-- Credentials are never stored in this repository. `<TEST_EMAIL>` and `<TEST_PASSWORD>` come from the local configuration (GitHub Secrets in CI).
+- Credentials are never stored in this repository. A case that needs an account creates a new one at run time (a unique `...@example.com` email and a password generated at run time, fake data only), and the test deletes it afterwards. `<TEST_EMAIL>` and `<TEST_PASSWORD>` in the cases stand for these run-time values..
 - Cases that create an account must delete it at the end (see TC-REG-011). The cart belongs to the account, so deleting the account also removes its cart.
 - The advertising popup can appear on any page change. Closing it is the job of the test framework and is not written as a step in each case.
 
@@ -23,8 +23,8 @@
 |---|---|
 | Name | `Test User` |
 | Unique email | `qa-<timestamp>@example.com`, generated at run time (every run uses a new email) |
-| Existing email | `<TEST_EMAIL>` (an account that already exists) |
-| Password | `<TEST_PASSWORD>` |
+| Existing email | `<TEST_EMAIL>` (the email of an account created by the test before the case starts) |
+| Password | `<TEST_PASSWORD>` (generated at run time) |
 | Invalid emails | `test`, `test@` |
 | Required fields of the account form | Password, First name, Last name, Address, State, City, Zipcode, Mobile Number |
 | Valid account data | Title `Mrs`, First name `Test`, Last name `User`, Address `123 Test Street`, Country `Singapore`, State `Test`, City `Test`, Zipcode `123456`, Mobile Number `123456789`, Date of birth 1 January 2000 |
