@@ -6,4 +6,11 @@
             <class name="tests.SmokeTest"/>
         </classes>
     </test>
+
+    <test name="Registration">
+        <classes>
+            <class name="tests.SignupFormTest"/>
+        </classes>
+    </test>
+
 </suite>
