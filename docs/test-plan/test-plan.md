@@ -190,6 +190,7 @@ Source: exploratory session, 2026-11-22 to 2026-11-25, on https://automationexer
 | OBS-11 | FT-10 | Subscribing with the same email again succeeds with no duplicate warning; the success message disappears after about 5 seconds and the field is cleared. |
 | OBS-12 | FT-11 | An unknown URL redirects to the home page; there is no 404 page. |
 | OBS-13 | FT-05 | The cart page `/view_cart` has the browser tab title `Automation Exercise - Checkout` (seen 2026-11-27). |
+| OBS-14 | FT-06 | The **Account Deleted!** page `/delete_account` has the browser tab title `Automation Exercise - Account Created` (seen twice on 2026-11-28). |
 
 ### 10.3 Items to verify again
 
