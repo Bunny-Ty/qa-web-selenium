@@ -1,18 +1,23 @@
 package pages;
 
-import core.AdPopup;
-import core.Config;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.TimeoutException;
+
+import core.AdPopup;
+import core.Config;
 
 public class LoginPage extends BasePage {
 
-    private static final By SIGNUP_NAME = By.cssSelector("[data-qa='signup-name']");
-    private static final By SIGNUP_EMAIL = By.cssSelector("[data-qa='signup-email']");
-    private static final By SIGNUP_BUTTON = By.cssSelector("[data-qa='signup-button']");
+    private static final By LOGIN_EMAIL = qa("login-email");
+    private static final By LOGIN_PASSWORD = qa("login-password");
+    private static final By LOGIN_BUTTON = qa("login-button");
+    private static final By LOGIN_ERROR = By.xpath("//form[.//*[@data-qa='login-button']]//p");
+    private static final By SIGNUP_NAME = qa("signup-name");
+    private static final By SIGNUP_EMAIL = qa("signup-email");
+    private static final By SIGNUP_BUTTON = qa("signup-button");
+    private static final By SIGNUP_ERROR = By.xpath("//form[.//*[@data-qa='signup-button']]//p");
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -21,6 +26,10 @@ public class LoginPage extends BasePage {
     public LoginPage open() {
         driver.get(Config.baseUrl() + "login");
         AdPopup.dismissIfPresent(driver);
+        return waitUntilLoaded();
+    }
+
+    public LoginPage waitUntilLoaded() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(SIGNUP_BUTTON));
         } catch (TimeoutException e) {
@@ -50,14 +59,44 @@ public class LoginPage extends BasePage {
         return new SignupPage(driver).waitUntilOpen();
     }
 
-    public String activeFieldDataQa() {
-        return (String) ((JavascriptExecutor) driver)
-                .executeScript("return document.activeElement.getAttribute('data-qa')");
+    public LoginPage signUpExpectingError(String name, String email) {
+        enterSignupName(name).enterSignupEmail(email);
+        clickAndWaitForVisible(SIGNUP_BUTTON, SIGNUP_ERROR);
+        return this;
     }
 
-    public String validationMessage(String dataQa) {
-        return driver.findElement(By.cssSelector("[data-qa='" + dataQa + "']"))
-                .getDomProperty("validationMessage");
+    public HomePage login(String email, String password) {
+        type(LOGIN_EMAIL, email);
+        type(LOGIN_PASSWORD, password);
+        clickAndWaitForHome(LOGIN_BUTTON);
+        return new HomePage(driver);
     }
 
+    public LoginPage loginExpectingError(String email, String password) {
+        type(LOGIN_EMAIL, email);
+        type(LOGIN_PASSWORD, password);
+        clickAndWaitForVisible(LOGIN_BUTTON, LOGIN_ERROR);
+        return this;
+    }
+
+    public String signupError() {
+        return driver.findElement(SIGNUP_ERROR).getText().trim();
+    }
+
+    public String signupErrorColor() {
+        return driver.findElement(SIGNUP_ERROR).getCssValue("color");
+    }
+
+    public String loginError() {
+        return driver.findElement(LOGIN_ERROR).getText().trim();
+    }
+
+    public String loginErrorColor() {
+        return driver.findElement(LOGIN_ERROR).getCssValue("color");
+    }
+
+    public boolean isLoginAndSignupFormDisplayed() {
+        return driver.findElement(LOGIN_BUTTON).isDisplayed()
+                && driver.findElement(SIGNUP_BUTTON).isDisplayed();
+    }
 }

@@ -11,6 +11,7 @@
         <classes>
             <class name="tests.SignupFormTest"/>
             <class name="tests.AccountCreationTest"/>
+            <class name="tests.AccountRulesTest"/>
         </classes>
     </test>
 

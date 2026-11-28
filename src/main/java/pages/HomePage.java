@@ -2,12 +2,14 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import core.Config;
 
 public class HomePage extends BasePage {
 
     private static final By PRODUCTS_LINK = By.cssSelector("a[href='/products']");
+    private static final By LOGIN_LINK = By.cssSelector("ul.navbar-nav a[href='/login']");
     private static final By LOGOUT_LINK = By.cssSelector("a[href='/logout']");
     private static final By DELETE_ACCOUNT_LINK = By.cssSelector("a[href='/delete_account']");
     private static final By LOGGED_IN_AS = By.xpath(
@@ -28,10 +30,12 @@ public class HomePage extends BasePage {
     }
 
     public boolean isLoggedIn() {
+        waitForHeader();
         return !driver.findElements(DELETE_ACCOUNT_LINK).isEmpty();
     }
 
     public boolean isLogoutShown() {
+        waitForHeader();
         return !driver.findElements(LOGOUT_LINK).isEmpty();
     }
 
@@ -42,5 +46,15 @@ public class HomePage extends BasePage {
     public AccountPage deleteAccount() {
         clickAndWaitForUrl(DELETE_ACCOUNT_LINK, "/delete_account");
         return new AccountPage(driver);
+    }
+
+    public LoginPage logout() {
+        clickAndWaitForUrl(LOGOUT_LINK, "/login");
+        return new LoginPage(driver).waitUntilLoaded();
+    }
+
+    private void waitForHeader() {
+        wait.until((ExpectedCondition<Boolean>) d ->
+                !d.findElements(DELETE_ACCOUNT_LINK).isEmpty() || !d.findElements(LOGIN_LINK).isEmpty());
     }
 }

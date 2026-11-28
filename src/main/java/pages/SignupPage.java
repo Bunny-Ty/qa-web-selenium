@@ -54,4 +54,13 @@ public class SignupPage extends BasePage {
     private void select(String id, String visibleText) {
         new Select(driver.findElement(By.id(id))).selectByVisibleText(visibleText);
     }
+
+    public SignupPage clearField(String dataQa) {
+        driver.findElement(qa(dataQa)).clear();
+        return this;
+    }
+
+    public void submitExpectingValidation() {
+        driver.findElement(CREATE_ACCOUNT).click();
+    }
 }

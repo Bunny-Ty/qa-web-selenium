@@ -1,8 +1,11 @@
 package pages;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -35,6 +38,17 @@ public abstract class BasePage {
         clickAndWait(locator, d -> d.getCurrentUrl().replace("#google_vignette", "").equals(home));
     }
 
+    protected void clickAndWaitForVisible(By locator, By expected) {
+        clickAndWait(locator, d -> {
+            try {
+                List<WebElement> found = d.findElements(expected);
+                return !found.isEmpty() && found.get(0).isDisplayed();
+            } catch (StaleElementReferenceException e) {
+                return false;
+            }
+        });
+    }
+
     private void clickAndWait(By locator, ExpectedCondition<Boolean> arrived) {
         driver.findElement(locator).click();
         wait.until(ExpectedConditions.or(arrived, ExpectedConditions.urlContains("#google_vignette")));
@@ -48,6 +62,15 @@ public abstract class BasePage {
         if (!text.isEmpty()) {
             field.sendKeys(text);
         }
+    }
+
+    public String activeFieldDataQa() {
+        return (String) ((JavascriptExecutor) driver)
+                .executeScript("return document.activeElement.getAttribute('data-qa')");
+    }
+
+    public String validationMessage(String dataQa) {
+        return driver.findElement(qa(dataQa)).getDomProperty("validationMessage");
     }
 
     public String currentUrl() {

@@ -7,25 +7,31 @@ import core.TestData;
 import pages.AccountPage;
 import pages.HomePage;
 import pages.LoginPage;
+import pages.SignupPage;
 
 public abstract class AccountBaseTest extends BaseTest {
 
     protected String email;
     protected String password;
+    private boolean accountExists;
 
     @BeforeMethod
     public void prepareCredentials() {
         email = TestData.uniqueEmail();
         password = TestData.password();
+        accountExists = false;
     }
 
     @AfterMethod(alwaysRun = true)
-    public void deleteAccountIfLoggedIn() {
+    public void deleteAccountIfExists() {
         if (driver == null) {
             return;
         }
         try {
             HomePage home = new HomePage(driver).open();
+            if (!home.isLoggedIn() && accountExists) {
+                home = new LoginPage(driver).open().login(email, password);
+            }
             if (home.isLoggedIn()) {
                 home.deleteAccount();
             }
@@ -35,9 +41,14 @@ public abstract class AccountBaseTest extends BaseTest {
     }
 
     protected AccountPage registerNewAccount() {
-        return new LoginPage(driver).open()
+        SignupPage form = new LoginPage(driver).open()
                 .signUp(TestData.NAME, email)
-                .fillValidAccount(password)
-                .submit();
+                .fillValidAccount(password);
+        accountExists = true;
+        return form.submit();
+    }
+
+    protected void markAccountDeleted() {
+        accountExists = false;
     }
 }
