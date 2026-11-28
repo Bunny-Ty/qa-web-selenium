@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.TimeoutException;
 
 public class LoginPage extends BasePage {
 
@@ -20,7 +21,12 @@ public class LoginPage extends BasePage {
     public LoginPage open() {
         driver.get(Config.baseUrl() + "login");
         AdPopup.dismissIfPresent(driver);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SIGNUP_BUTTON));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(SIGNUP_BUTTON));
+        } catch (TimeoutException e) {
+            throw new IllegalStateException("Login page did not load. URL=" + driver.getCurrentUrl()
+                    + ", title=" + driver.getTitle(), e);
+        }
         return this;
     }
 
@@ -36,6 +42,12 @@ public class LoginPage extends BasePage {
 
     public void submitSignup() {
         driver.findElement(SIGNUP_BUTTON).click();
+    }
+
+    public SignupPage signUp(String name, String email) {
+        enterSignupName(name).enterSignupEmail(email);
+        clickAndWaitForUrl(SIGNUP_BUTTON, "/signup");
+        return new SignupPage(driver).waitUntilOpen();
     }
 
     public String activeFieldDataQa() {

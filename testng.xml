@@ -10,6 +10,7 @@
     <test name="Registration">
         <classes>
             <class name="tests.SignupFormTest"/>
+            <class name="tests.AccountCreationTest"/>
         </classes>
     </test>
 
