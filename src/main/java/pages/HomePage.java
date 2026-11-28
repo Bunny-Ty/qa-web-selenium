@@ -43,6 +43,16 @@ public class HomePage extends BasePage {
         return driver.findElement(LOGGED_IN_AS).getText().trim();
     }
 
+    public boolean isLoginLinkShown() {
+        waitForHeader();
+        return !driver.findElements(LOGIN_LINK).isEmpty();
+    }
+
+    public boolean isLoggedInTextShown() {
+        waitForHeader();
+        return !driver.findElements(LOGGED_IN_AS).isEmpty();
+    }
+
     public AccountPage deleteAccount() {
         clickAndWaitForUrl(DELETE_ACCOUNT_LINK, "/delete_account");
         return new AccountPage(driver);

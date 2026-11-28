@@ -15,4 +15,10 @@
         </classes>
     </test>
 
+    <test name="Login">
+        <classes>
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
+
 </suite>

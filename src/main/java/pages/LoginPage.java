@@ -79,6 +79,16 @@ public class LoginPage extends BasePage {
         return this;
     }
 
+    public LoginPage fillLogin(String email, String password) {
+        type(LOGIN_EMAIL, email);
+        type(LOGIN_PASSWORD, password);
+        return this;
+    }
+
+    public void submitLogin() {
+        driver.findElement(LOGIN_BUTTON).click();
+    }
+
     public String signupError() {
         return driver.findElement(SIGNUP_ERROR).getText().trim();
     }
